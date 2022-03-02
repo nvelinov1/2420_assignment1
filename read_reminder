@@ -11,3 +11,36 @@
 #If the option is not included, read the file line by line
 #Use the grep command to search the reminder file
 #If the option is included, search the file and output the results
+#Store the user input as a variable
+#Loop through the current directory to see if the reminders.txt file exists
+#If the file doesn't exist, create the reminders file
+#If the file exists, append stdin to the reminders file
+
+read_from_stdin() {
+        input=""
+        while read line
+        do
+                input="$input""\n""$line"
+        done
+        echo "$input" 
+}
+
+REMINDER=$*
+
+for file in $HOME; do
+        if [ "$file" == ".reminders" ]; then
+                break
+        else
+                touch "$HOME/.reminders"
+                break
+        fi
+done
+
+echo "$REMINDER" >> "$HOME/.reminders"
+
+
+if [ ! $1 ]; then
+	INPUT="$(read_from_stdin)"
+	echo $INPUT	
+fi
+

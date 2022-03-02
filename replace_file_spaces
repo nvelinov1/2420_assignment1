@@ -15,12 +15,14 @@
 determine_special_character() {
 	if [[ ${OPTARG} == "-" ]]
 	then
+		echo "A hyphen has been set as the special character" >&2
 		SPECIAL_CHARACTER="-"
-		echo "A hyphen has been set as the special character"
+		echo $SPECIAL_CHARACTER
 	elif [[ ${OPTARG} == "_" ]]  
 	then
+		echo "An underscore has been set as the special character" >&2
 		SPECIAL_CHARACTER="_"
-		echo "An underscore has been set as the special character"
+		echo $SPECIAL_CHARACTER
 	fi
 }
 
@@ -35,10 +37,6 @@ do
 			echo "Usage: ${0} [-c CHARACTER TO REPLACE SPACES WITH] [FILE OR DIRECTORY] "
 			echo "Replaces spaces in a file or directory with the desired character"
 			;;
-		:)
-			SPECIAL_CHARACTER="_"
-			echo "The -c option was not included, so an $SPECIAL_CHARACTER has been set as the special character"
-		
 	esac 
 done 
 
