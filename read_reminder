@@ -1,0 +1,13 @@
+#!/bin/bash
+
+#: Title       : read_reminder
+#: Date        : Feb 24 2022
+#: Author      : Nikola Velinov
+#: Version     : 1.0
+#: Description : Reads reminders from the reminder file
+#: Options     : -f, followed by a keyword to search in the reminder file
+
+#Check to see if the user has included the -f option
+#If the option is not included, read the file line by line
+#Use the grep command to search the reminder file
+#If the option is included, search the file and output the results

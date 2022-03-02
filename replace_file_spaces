@@ -1,0 +1,52 @@
+#!/bin/bash
+#: Title       : replace_file_spaces 
+#: Date        : Feb 23 2022
+#: Author      : Nikola Velinov
+#: Version     : 1.0
+#: Description : Renames all files in a directory or file with spaces in their name with an underscore or a hyphen
+#: Options     : -c, followed by the character to replace spaces with (hyphen or underscore)
+
+#Using conditional statements, determine if the user's input is a file or directory
+#If it is a directory, loop through all of the files in the directory
+#Using conditional statements, check if the user has included the optional "-c" option
+#Check using conditional statements if the user wants spaces to be replaced with an underscore or hyphen
+#Use the mv command to rename files
+
+determine_special_character() {
+	if [[ ${OPTARG} == "-" ]]
+	then
+		SPECIAL_CHARACTER="-"
+		echo "A hyphen has been set as the special character"
+	elif [[ ${OPTARG} == "_" ]]  
+	then
+		SPECIAL_CHARACTER="_"
+		echo "An underscore has been set as the special character"
+	fi
+}
+
+while getopts c:h OPTION
+do
+	case ${OPTION} in 
+		c)
+			SPECIAL_CHARACTER="$(determine_special_character)"
+			echo $SPECIAL_CHARACTER
+			;;
+		h)
+			echo "Usage: ${0} [-c CHARACTER TO REPLACE SPACES WITH] [FILE OR DIRECTORY] "
+			echo "Replaces spaces in a file or directory with the desired character"
+			;;
+		:)
+			SPECIAL_CHARACTER="_"
+			echo "The -c option was not included, so an $SPECIAL_CHARACTER has been set as the special character"
+		
+	esac 
+done 
+
+if [ $OPTIND -eq 1 ] 
+then 
+	SPECIAL_CHARACTER="_"
+	echo "The -c option was not included so $SPECIAL_CHARACTER has been set as the special character"
+fi
+
+
+

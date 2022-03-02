@@ -1,0 +1,29 @@
+#!/bin/bash
+#: Title       : create_user
+#: Date        : Feb 23 2022
+#: Author      : Nikola Velinov
+#: Version     : 1.0
+#: Description : Creates a new user without using the useradd utility
+#: Options     : None
+
+#Read a username and a password from user input
+#Encrypt the password using the passwd utility
+#Write the user's account details in the /etc/passwd file
+#Create a group for the user by editing the /etc/group file
+#Create a home directory for the user
+#Copy the contents of /etc/skel in the user's home directory
+
+
+read -p "Please enter your username: " USERNAME
+
+LARGEST_UID="$(awk -F: '{ if (uid < $3 && $3 < 6000) uid=$3 } END { print uid + 1 }' /etc/passwd)"
+echo "$USERNAME:x:$LARGEST_UID:$LARGEST_UID:new user:/home/$USERNAME:/bin/bash" >> /etc/passwd 
+echo "$USERNAME:x:$LARGEST_UID" >> /etc/group
+
+passwd $USERNAME
+mkdir /home/$USERNAME/ 2>/dev/null
+cp -v /etc/skel/.* /home/$USERNAME/ &>/dev/null
+
+chown -R $USERNAME:$USERNAME /home/$USERNAME
+chmod 750 /home/$USERNAME 
+
