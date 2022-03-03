@@ -31,7 +31,6 @@ do
 	case ${OPTION} in 
 		c)
 			SPECIAL_CHARACTER="$(determine_special_character)"
-			echo $SPECIAL_CHARACTER
 			;;
 		h)
 			echo "Usage: ${0} [-c CHARACTER TO REPLACE SPACES WITH] [FILE OR DIRECTORY] "
@@ -46,5 +45,21 @@ then
 	echo "The -c option was not included so $SPECIAL_CHARACTER has been set as the special character"
 fi
 
+shift $((OPTIND -1))
+FILEDIR=$1
 
+if [[ -f $FILEDIR ]]
+then
+	mv "$FILEDIR" "${FILEDIR// /$SPECIAL_CHARACTER}"
+	echo "File has been successfully renamed"
+fi
 
+if [[ -d $FILEDIR ]]
+then 
+	for file in $FILEDIR/*
+
+	do
+		mv "$file" "${file// /$SPECIAL_CHARACTER}"
+		echo "File has been successfully renamed"
+	done
+fi
