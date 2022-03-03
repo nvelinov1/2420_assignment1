@@ -27,18 +27,19 @@ while getopts f:h OPTION
 do
 	case ${OPTION} in
 		f)
-			cat "$HOME/.reminders" | grep ${OPTARG} 2> /dev/null
+			cat "$HOME/.reminders" | grep ${OPTARG} | less
 			exit 1
 			;;
 		h)
 			default
+			exit 0
 			;;
 		*)
-			cat "$HOME/.reminders"
+			cat "$HOME/.reminders" | less
 			exit 1
 			;;
 	esac
-done
+done 2> /dev/null
 
 
 shift $((OPTIND -2)) 2> /dev/null
@@ -67,3 +68,4 @@ fi
 
 echo -ne "$input" >> "$HOME/.reminders"
 
+exit 0

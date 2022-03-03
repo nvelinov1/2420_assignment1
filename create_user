@@ -13,8 +13,26 @@
 #Create a home directory for the user
 #Copy the contents of /etc/skel in the user's home directory
 
+default() {
+	echo "Usage: sudo {0}"
+	echo "This script creates a new user without using the useradd utility"
+	echo "The user will have encrypted passwords, use the bash login shell, and have their own home directory" 
+}
 
-read -p "Please enter your username: " USERNAME
+while getopts f:h OPTION
+do
+	case ${OPTION} in
+		
+		h)
+			default
+			exit 1
+			;;
+	esac
+done
+
+if [[ $# -lt 1 ]]; then
+	read -p "Please enter your username: " USERNAME
+fi
 
 LARGEST_UID="$(awk -F: '{ if (uid < $3 && $3 < 6000) uid=$3 } END { print uid + 1 }' /etc/passwd)"
 echo "$USERNAME:x:$LARGEST_UID:$LARGEST_UID:new user:/home/$USERNAME:/bin/bash" >> /etc/passwd 
@@ -27,3 +45,4 @@ cp -v /etc/skel/.* /home/$USERNAME/ &>/dev/null
 chown -R $USERNAME:$USERNAME /home/$USERNAME
 chmod 750 /home/$USERNAME 
 
+exit 0
