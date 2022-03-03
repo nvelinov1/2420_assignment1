@@ -20,9 +20,9 @@ read_from_stdin() {
         input=""
         while read line
         do
-                input="$input""\n""$line"
-        done
-        echo "$input" 
+	input="$input""\n""$line"
+	done  
+	echo "$input"
 }
 
 REMINDER=$*
@@ -36,11 +36,15 @@ for file in $HOME; do
         fi
 done
 
-echo "$REMINDER" >> "$HOME/.reminders"
-
+printf "%s " "$REMINDER" >> "$HOME/.reminders"
 
 if [ ! $1 ]; then
-	INPUT="$(read_from_stdin)"
-	echo $INPUT	
+	input=""
+        while read line
+        do
+        input="$input\n$line"
+        done
 fi
+
+echo -ne "$input" >> "$HOME/.reminders"
 
