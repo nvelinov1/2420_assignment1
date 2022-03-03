@@ -16,14 +16,32 @@
 #If the file doesn't exist, create the reminders file
 #If the file exists, append stdin to the reminders file
 
-read_from_stdin() {
-        input=""
-        while read line
-        do
-	input="$input""\n""$line"
-	done  
-	echo "$input"
+default() {
+
+	echo "Usage: ${0} [-f SEARCH TERM IN REMINDERS FILE] || [REMINDER TEXT]  "
+	echo "Additionally, you can run the script without positional parameters to enter interactive mode"
+	echo "This script stores reminders in a reminders file, and allows the user to search their reminders"
 }
+
+while getopts f:h OPTION
+do
+	case ${OPTION} in
+		f)
+			cat "$HOME/.reminders" | grep ${OPTARG} 2> /dev/null
+			exit 1
+			;;
+		h)
+			default
+			;;
+		*)
+			cat "$HOME/.reminders"
+			exit 1
+			;;
+	esac
+done
+
+
+shift $((OPTIND -2)) 2> /dev/null
 
 REMINDER=$*
 
@@ -36,14 +54,15 @@ for file in $HOME; do
         fi
 done
 
-printf "%s " "$REMINDER" >> "$HOME/.reminders"
+echo "$REMINDER" >> "$HOME/.reminders"
 
-if [ ! $1 ]; then
+if [ ! $1 ] || [ $# -lt 1 ]; then
+	echo "Entering interactive mode, press Ctrl+D to exit."
 	input=""
-        while read line
-        do
-        input="$input\n$line"
-        done
+	while read line
+	do
+	input="$input\n$line"
+	done
 fi
 
 echo -ne "$input" >> "$HOME/.reminders"
