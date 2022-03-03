@@ -12,7 +12,7 @@
 #Use the grep command to search the reminder file
 #If the option is included, search the file and output the results
 #Store the user input as a variable
-#Loop through the current directory to see if the reminders.txt file exists
+#Loop through the home directory to see if the .reminders file exists
 #If the file doesn't exist, create the reminders file
 #If the file exists, append stdin to the reminders file
 
@@ -22,6 +22,7 @@ default() {
 	echo "Additionally, you can run the script without positional parameters to enter interactive mode"
 	echo "This script stores reminders in a reminders file, and allows the user to search their reminders"
 }
+
 
 while getopts f:h OPTION
 do
@@ -35,7 +36,7 @@ do
 			exit 0
 			;;
 		*)
-			cat "$HOME/.reminders" | less
+			cat "$HOME/.reminders" | less 
 			exit 1
 			;;
 	esac

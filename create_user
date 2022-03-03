@@ -14,12 +14,12 @@
 #Copy the contents of /etc/skel in the user's home directory
 
 default() {
-	echo "Usage: sudo {0}"
+	echo "Usage: sudo $0"
 	echo "This script creates a new user without using the useradd utility"
 	echo "The user will have encrypted passwords, use the bash login shell, and have their own home directory" 
 }
 
-while getopts f:h OPTION
+while getopts h OPTION
 do
 	case ${OPTION} in
 		

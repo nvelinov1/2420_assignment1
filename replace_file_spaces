@@ -18,12 +18,25 @@ determine_special_character() {
 		echo "A hyphen has been set as the special character" >&2
 		SPECIAL_CHARACTER="-"
 		echo $SPECIAL_CHARACTER
+		exit 0
 	elif [[ ${OPTARG} == "_" ]]  
 	then
 		echo "An underscore has been set as the special character" >&2
 		SPECIAL_CHARACTER="_"
 		echo $SPECIAL_CHARACTER
+		exit 0
 	fi
+}
+
+default() {
+	echo "Usage: $0 [-c CHARACTER TO REPLACE SPACES WITH] [FILE OR DIRECTORY] "
+	echo "Replaces spaces in a file or directory with the desired character"
+	exit 1
+}
+
+rename_file() {
+	mv "$1" "${1// /$2}" 2> /dev/null
+	echo "File has been successfully renamed" 
 }
 
 while getopts c:h OPTION
@@ -33,8 +46,7 @@ do
 			SPECIAL_CHARACTER="$(determine_special_character)"
 			;;
 		h)
-			echo "Usage: ${0} [-c CHARACTER TO REPLACE SPACES WITH] [FILE OR DIRECTORY] "
-			echo "Replaces spaces in a file or directory with the desired character"
+			default
 			;;
 	esac 
 done 
@@ -50,8 +62,7 @@ FILEDIR=$1
 
 if [[ -f $FILEDIR ]]
 then
-	mv "$FILEDIR" "${FILEDIR// /$SPECIAL_CHARACTER}"
-	echo "File has been successfully renamed"
+	rename_file "$FILEDIR" $SPECIAL_CHARACTER
 fi
 
 if [[ -d $FILEDIR ]]
@@ -59,7 +70,16 @@ then
 	for file in $FILEDIR/*
 
 	do
-		mv "$file" "${file// /$SPECIAL_CHARACTER}"
-		echo "File has been successfully renamed"
+		rename_file "$file" $SPECIAL_CHARACTER
+		if [[ -d $file ]]
+		then
+			for files in $file/*
+			do
+				rename_file "$files" $SPECIAL_CHARACTER
+			done
+		fi
+
 	done
 fi
+
+exit 0
