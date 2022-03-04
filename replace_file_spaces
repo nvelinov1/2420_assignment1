@@ -68,17 +68,15 @@ fi
 if [[ -d $FILEDIR ]]
 then 
 	for file in $FILEDIR/*
-
 	do
 		rename_file "$file" $SPECIAL_CHARACTER
-		if [[ -d $file ]]
+		if [[ -d "$file" ]] 
 		then
 			for files in $file/*
 			do
 				rename_file "$files" $SPECIAL_CHARACTER
 			done
-		fi
-
+		fi 
 	done
 fi
 
