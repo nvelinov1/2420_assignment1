@@ -60,13 +60,10 @@ echo "$REMINDER" >> "$HOME/.reminders"
 
 if [ ! $1 ] || [ $# -lt 1 ]; then
 	echo "Entering interactive mode, press Ctrl+D to exit."
-	input=""
 	while read line
 	do
-	input="$input\n$line"
+	echo "$line" >> "$HOME/.reminders"
 	done
 fi
-
-echo -ne "$input" >> "$HOME/.reminders"
 
 exit 0
